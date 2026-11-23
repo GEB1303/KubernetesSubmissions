@@ -1,0 +1,14 @@
+apiVersion: v1                 # Versión de la API donde vive el recurso Service
+kind: Service                  # Tipo de recurso: Service ("extensión telefónica fija")
+metadata:                      # Datos que identifican al recurso
+  name: todo-app-svc           # Nombre del Service de la Todo app
+spec:                          # Cómo debe comportarse el Service
+  type: NodePort               # Abre una "puerta lateral" en todos los nodos
+  selector:                    # A qué pods enviar el tráfico
+    app: todo-app              # Pods con la etiqueta app=todo-app (la del deployment.yaml)
+  ports:                       # Puertos que maneja el Service
+    - name: http               # Nombre descriptivo del puerto
+      nodePort: 30080          # Puerta lateral visible desde fuera (k3d la publica en localhost:8082)
+      protocol: TCP            # Protocolo de transporte (HTTP viaja sobre TCP)
+      port: 1234               # Extensión interna del Service dentro del clúster
+      targetPort: 3000         # Puerto donde escucha la Todo app dentro del contenedor
