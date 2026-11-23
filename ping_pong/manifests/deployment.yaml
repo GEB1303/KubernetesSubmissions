@@ -1,0 +1,17 @@
+apiVersion: apps/v1                # API donde viven los Deployments
+kind: Deployment                   # Tipo de recurso: Deployment (el "jefe de turno" que mantiene los pods)
+metadata:                          # Datos que identifican al recurso
+  name: ping-pong-dep              # Nombre del Deployment
+spec:                              # Cómo debe comportarse el Deployment
+  replicas: 1                      # Cuántos pods deben estar corriendo
+  selector:                        # Cómo reconoce el Deployment a SUS pods
+    matchLabels:                   # Debe coincidir con las etiquetas de la plantilla de abajo
+      app: ping-pong               # Etiqueta que buscan el Deployment y el Service
+  template:                        # Plantilla ("molde") para crear cada pod
+    metadata:                      # Datos de cada pod
+      labels:                      # Etiquetas que llevará cada pod
+        app: ping-pong             # Debe ser igual al selector de arriba
+    spec:                          # Qué corre dentro del pod
+      containers:                  # Lista de contenedores del pod
+        - name: ping-pong          # Nombre del contenedor
+          image: gabrielechegollen/ping-pong:1.9  # Imagen de ping-pong, tag del ejercicio 1.9

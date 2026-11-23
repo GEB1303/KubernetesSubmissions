@@ -1,0 +1,12 @@
+apiVersion: v1                 # Versión de la API donde vive el recurso Service
+kind: Service                  # Tipo de recurso: Service ("extensión telefónica fija")
+metadata:                      # Datos que identifican al recurso
+  name: ping-pong-svc          # Nombre del Service (el Ingress lo buscará por este nombre)
+spec:                          # Cómo debe comportarse el Service
+  type: ClusterIP              # Solo extensión interna; desde fuera se llega por el Ingress
+  selector:                    # A qué pods enviar el tráfico
+    app: ping-pong             # Pods con la etiqueta app=ping-pong (la del deployment.yaml)
+  ports:                       # Puertos que maneja el Service
+    - port: 2345               # Extensión interna del Service (la usará el Ingress)
+      protocol: TCP            # Protocolo de transporte (HTTP viaja sobre TCP)
+      targetPort: 3000         # Puerto donde escucha ping-pong dentro del contenedor

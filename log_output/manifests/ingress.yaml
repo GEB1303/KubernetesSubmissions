@@ -1,15 +1,22 @@
 apiVersion: networking.k8s.io/v1   # API de red de Kubernetes, donde vive el recurso Ingress
 kind: Ingress                      # Tipo de recurso: Ingress (instrucciones para la "recepción")
 metadata:                          # Datos que identifican al recurso
-  name: log-output-ingress         # Nombre del Ingress
+  name: log-output-ingress         # Nombre del Ingress (compartido por Log output y ping-pong)
 spec:                              # Cómo debe repartir el tráfico
   rules:                           # Lista de reglas de ruteo
   - http:                          # Reglas para tráfico HTTP
-      paths:                       # Lista de rutas a revisar
-      - path: /                    # Ruta a comparar ("la dirección del sobre")
-        pathType: Prefix           # Coincide si la URL EMPIEZA con esta ruta (/ = todo)
+      paths:                       # Lista de rutas; gana la coincidencia MÁS LARGA
+      - path: /pingpong            # Regla 1: direcciones que empiezan con /pingpong
+        pathType: Prefix           # Coincide si la URL EMPIEZA con /pingpong
         backend:                   # A dónde mandar lo que coincida
           service:                 # El destino es un Service
-            name: log-output-svc   # Nombre del Service destino (el ClusterIP del paso anterior)
+            name: ping-pong-svc    # Departamento ping-pong
             port:                  # Puerto del Service al que se entrega
-              number: 2345         # Debe coincidir con el "port" del Service
+              number: 2345         # Debe coincidir con el "port" de ping-pong-svc
+      - path: /                    # Regla 2: todo lo demás
+        pathType: Prefix           # Coincide con cualquier URL (todas empiezan con /)
+        backend:                   # A dónde mandar lo que coincida
+          service:                 # El destino es un Service
+            name: log-output-svc   # Departamento Log output
+            port:                  # Puerto del Service al que se entrega
+              number: 2345         # Debe coincidir con el "port" de log-output-svc
