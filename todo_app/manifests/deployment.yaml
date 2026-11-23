@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
         - name: todo-app
-          image: gabrielechegollen/todo-app:1.2
+          image: gabrielechegollen/todo-app:1.5
