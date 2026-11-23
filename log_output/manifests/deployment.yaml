@@ -1,17 +1,17 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: log-output-dep
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: log-output
-  template:
-    metadata:
-      labels:
-        app: log-output
-    spec:
-      containers:
-        - name: log-output
-          image: gabrielechegollen/log-output:1.1
+apiVersion: apps/v1                # API donde viven los Deployments
+kind: Deployment                   # Tipo de recurso: Deployment (el "jefe de turno" que mantiene los pods)
+metadata:                          # Datos que identifican al recurso
+  name: log-output-dep             # Nombre del Deployment
+spec:                              # Cómo debe comportarse el Deployment
+  replicas: 1                      # Cuántos pods deben estar corriendo
+  selector:                        # Cómo reconoce el Deployment a SUS pods
+    matchLabels:                   # Debe coincidir con las etiquetas de la plantilla de abajo
+      app: log-output              # Etiqueta que buscan el Deployment (y después el Service)
+  template:                        # Plantilla ("molde") para crear cada pod
+    metadata:                      # Datos de cada pod
+      labels:                      # Etiquetas que llevará cada pod
+        app: log-output            # Debe ser igual al selector de arriba
+    spec:                          # Qué corre dentro del pod
+      containers:                  # Lista de contenedores del pod
+        - name: log-output         # Nombre del contenedor
+          image: gabrielechegollen/log-output:1.7  # Imagen con tag NUEVO (la "edición" 1.7)
